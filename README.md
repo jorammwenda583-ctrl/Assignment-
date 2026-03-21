@@ -22,3 +22,22 @@ An end-to-end web application built with **Spring Boot** and **Weka** to predict
 2. **Install Dependencies:** ```bash
    mvn clean install
    
+*****NEXT DEFINITION OF FILE****
+   
+   # Student Performance Prediction App
+This is an AI-based Android application that predicts student performance using machine learning models (Weka).  
+
+## Features
+- Predicts performance from grades, attendance, and behavior.
+- Visual dashboard for teachers.
+- Stores predictions in MySQL database.
+
+## Tools
+- Java, Spring Boot
+- Weka
+- MySQL
+- Android Studio
+
+## How to Run
+1. Clone the repository:
+   
