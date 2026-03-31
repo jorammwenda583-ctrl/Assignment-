@@ -79,4 +79,14 @@ def generate_report():
 
 if __name__ == "__main__":
     app.run(port=5000)
+
+##CREATE VIRTUAL ENVIRONMENT 
+# 1. Create and enter your project folder
+mkdir student-prediction && cd student-prediction
+
+# 2. Create the virtual environment
+python -m venv venv
+
+# 3. Activate it (This tells Git Bash to use this specific folder)
+source venv/Scripts/activate
    
