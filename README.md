@@ -89,4 +89,10 @@ python -m venv venv
 
 # 3. Activate it (This tells Git Bash to use this specific folder)
 source venv/Scripts/activate
+
+##Machine learning logic
+
+# Install Scikit-Learn (ML), Pandas (Data), Flask (Web), and FPDF2 (PDFs)
+pip install scikit-learn pandas flask fpdf
+
    
