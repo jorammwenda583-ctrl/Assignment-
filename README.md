@@ -1,26 +1,35 @@
-# Assignment-
-AI based student academic performance predictions system 
-# 🎓 AI-Powered Student Performance Prediction System
+# Student Performance Prediction System 🎓
 
-An end-to-end web application built with **Spring Boot** and **Weka** to predict student academic outcomes and generate intervention reports.
+An end-to-end machine learning application that predicts student outcomes based on historical grades, attendance, and behavioral metrics.
 
-## 🌟 Key Features
-* **Performance Prediction:** Uses Weka (J48 Decision Tree) to forecast student grades.
-* **Data Analysis:** Python-based preprocessing using **NumPy** and **Scikit-learn**.
-* **Automated Reporting:** Generates student performance PDFs using **iText**.
-* **Persistent Storage:** Student records and results managed via **MySQL & JDBC**.
+## 🚀 Tech Stack
+- **Language:** Python 3.x
+- **ML Library:** Scikit-Learn (Random Forest)
+- **Database:** PostgreSQL / MySQL
+- **Reporting:** FPDF2 (PDF Generation)
+- **Environment:** Git Bash / Linux
 
-## 🛠️ Tech Stack
-* **Backend:** Java 17, Spring Boot, Maven
-* **Machine Learning:** Weka (Java), Scikit-learn (Python)
-* **Database:** MySQL
-* **Frontend:** HTML5, CSS3, JavaScript
-* **Reporting:** iText PDF library
+## 🛠️ Setup Instructions
+1. Clone the repo: `git clone https://github.com/your-username/student-predictor.git`
+2. Create virtual env: `python -m venv venv`
+3. Activate env: `source venv/Scripts/activate`
+4. Install dependencies: `pip install -r requirements.txt`
+5. Run the app: `python src/app.py`
 
-## ⚙️ Quick Start
-1. **Database Setup:** Run `src/main/resources/schema.sql` in your MySQL Workbench.
-2. **Install Dependencies:** ```bash
-   mvn clean install
+   
+   ##PROJECT FOLDER FOR STUDENT PREDICTION SYSTEM 
+   
+   student-predictor/
+├── data/               # Sample anonymized CSV data (optional)
+├── models/             # Where you save your trained .pkl files
+├── reports/            # Output folder for iText/FPDF PDFs
+├── src/                # Your core Python logic
+│   ├── database.py     # JDBC/SQLAlchemy connection
+│   ├── predictor.py    # Scikit-Learn logic
+│   └── app.py          # Main entry point
+├── requirements.txt    # List of dependencies
+└── README.md           # Instructions for the user
+
    
 *****NEXT DEFINITION OF FILE****
    
