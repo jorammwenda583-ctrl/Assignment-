@@ -49,4 +49,34 @@ This is an AI-based Android application that predicts student performance using 
 
 ## How to Run
 1. Clone the repository:
+
+
+##Python Code to create the PDF
+
+from flask import Flask, send_file
+from reportlab.pdfgen import canvas
+from sklearn.linear_model import LogisticRegression
+import io
+
+app = Flask(__name__)
+
+@app.route('/report')
+def generate_report():
+    # 1. Simple ML (The "Weka" part)
+    model = LogisticRegression()
+    # ... imagine training happens here ...
+
+    # 2. Create PDF (The "iText" part)
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
+    p.drawString(100, 750, "Machine Learning Report")
+    p.drawString(100, 730, "Result: Prediction Successful!")
+    p.showPage()
+    p.save()
+    
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name="report.pdf")
+
+if __name__ == "__main__":
+    app.run(port=5000)
    
