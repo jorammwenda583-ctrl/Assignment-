@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Risk Assessment System</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --dark: #2c3e50;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: var(--dark); padding: 40px 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        
+        h2 { text-align: center; color: var(--primary); margin-bottom: 30px; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; }
+        
+        .section-title { font-size: 1.1rem; font-weight: bold; margin: 20px 0 10px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .input-box label { display: block; font-size: 0.9rem; margin-bottom: 5px; color: #666; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 5px rgba(74,144,226,0.3); }
+
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1.1rem; font-weight: bold; margin-top: 10px; transition: 0.3s; }
+        button:hover { background: #357abd; transform: translateY(-2px); }
+
+        /* Report Styles */
+        #reportCard { display: none; margin-top: 40px; padding: 25px; border: 1px solid #eee; border-radius: 8px; background: #fafafa; }
+        .student-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px dashed #ddd; }
+        
+        .status-badge { padding: 10px 20px; border-radius: 50px; font-weight: bold; text-align: center; }
+        .fail-bg { background: #ffdada; color: var(--danger); }
+        .pass-bg { background: #d4f8e2; color: var(--success); }
+
+        canvas { margin-top: 30px; max-height: 400px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🎓 Academic Prediction Dashboard</h2>
+
+    <div class="section-title">Student Identification</div>
+    <div class="grid-inputs">
+        <div class="input-box">
+            <label>Full Name</label>
+            <input type="text" id="stuName" placeholder="e.g. John Doe">
+        </div>
+        <div class="input-box">
+            <label>Student ID</label>
+            <input type="text" id="stuID" placeholder="e.g. CS-2026-001">
+        </div>
+        <div class="input-box">
+            <label>Course Name</label>
+            <input type="text" id="stuCourse" placeholder="e.g. Computer Science">
+        </div>
+    </div>
+
+    <div class="section-title">Performance Metrics</div>
+    <div class="grid-inputs">
+        <div class="input-box">
+            <label>Attendance (%)</label>
+            <input type="number" id="att" value="85" max="100">
+        </div>
+        <div class="input-box">
+            <label>Behavior (1-10)</label>
+            <input type="number" id="beh" value="8" max="10">
+        </div>
+        <div class="input-box">
+            <label>Current Grade (%)</label>
+            <input type="number" id="grade" value="70" max="100">
+        </div>
+    </div>
+
+    <button onclick="generateReport()">Generate Analysis Report</button>
+
+    <div id="reportCard">
+        <div class="student-header">
+            <div>
+                <strong id="display_name" style="font-size: 1.4rem;"></strong><br>
+                <span id="display_id" style="color: #777;"></span> | <span id="display_course"></span>
+            </div>
+            <div id="statusBadge" class="status-badge"></div>
+        </div>
+
+        <p id="predictionSummary"></p>
+        
+        <canvas id="predictionChart"></canvas>
+    </div>
+</div>
+
+<script>
+    let chartInstance = null;
+
+    function generateReport() {
+        // Get Inputs
+        const name = document.getElementById('stuName').value || "Unknown Student";
+        const id = document.getElementById('stuID').value || "N/A";
+        const course = document.getElementById('stuCourse').value || "General Studies";
+        
+        const att = parseFloat(document.getElementById('att').value);
+        const beh = parseFloat(document.getElementById('beh').value);
+        const grade = parseFloat(document.getElementById('grade').value);
+
+        // Prediction Formula
+        const predictedOutcome = (att * 0.35) + (beh * 2.5) + (grade * 0.4);
+        
+        // Show Report Card
+        document.getElementById('reportCard').style.display = 'block';
+        document.getElementById('display_name').innerText = name;
+        document.getElementById('display_id').innerText = "ID: " + id;
+        document.getElementById('display_course').innerText = "Course: " + course;
+
+        const badge = document.getElementById('statusBadge');
+        const summary = document.getElementById('predictionSummary');
+
+        // Logic & Outcomes
+        if (predictedOutcome < 50 || att < 65) {
+            badge.innerText = "RISK: FAILURE WARNING";
+            badge.className = "status-badge fail-bg";
+            summary.innerHTML = `Based on the current trends, <strong>${name}</strong> is at risk of failing this course. Immediate intervention regarding attendance and academic support is recommended.`;
+        } else {
+            badge.innerText = "STATUS: ON TRACK";
+            badge.className = "status-badge pass-bg";
+            summary.innerHTML = `<strong>${name}</strong> is performing well. Based on current behavior and attendance, the predicted final outcome is positive.`;
+        }
+
+        renderChart(grade, predictedOutcome);
+    }
+
+    function renderChart(current, predicted) {
+        const ctx = document.getElementById('predictionChart').getContext('2d');
+        
+        if (chartInstance) { chartInstance.destroy(); }
+
+        chartInstance = new Chart(ctx, {
+            type: 'line', // Changed to line for "trend" feel
+            data: {
+                labels: ['Current Performance', 'Predicted Potential Outcome'],
+                datasets: [{
+                    label: 'Score Percentage (%)',
+                    data: [current, predicted],
+                    borderColor: '#4a90e2',
+                    backgroundColor: 'rgba(74, 144, 226, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true, max: 100, title: { display: true, text: 'Percentage' } }
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
